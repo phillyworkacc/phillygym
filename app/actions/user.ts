@@ -8,6 +8,7 @@ import { hashedPassword, generateId } from "@/utils/uuid";
 import { and, eq, like, ne, or, sql } from "drizzle-orm";
 import { getServerSession } from "next-auth"
 import { uploadImageToCloudinary } from "./extras";
+import sendMail from "@/lib/sendMail";
 
 
 export async function getSessionUser (): Promise<"no-session" | null | User> {
@@ -31,6 +32,7 @@ export async function createUserAccount (name: string, email: string, password: 
          instagram: "", tiktok: "", suspended: false, banned: false,
          joined: Date.now().toString()
       });
+      await sendMail("ayomiposi.opadijo@gmai.com", "New User", `${name} just joined Philly Gym`);
       return (res.rowCount > 0)
    } catch (e) {
       console.log(e)
