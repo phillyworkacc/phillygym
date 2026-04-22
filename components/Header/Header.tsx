@@ -3,7 +3,7 @@ import "./Header.css"
 import { CustomUserIcon, PhillyGymLogo } from "../Icons/Icon"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation";
-import { ChevronDown, Home, MessageCircle } from "lucide-react";
+import { ChevronDown, Download, Home, MessageCircle } from "lucide-react";
 import { useModal } from "../Modal/ModalContext";
 import { posterBannerImage } from "@/utils/images";
 import Spacing from "../Spacing/Spacing";
@@ -39,6 +39,11 @@ export default function Header() {
             <div className="box full pd-1 pdx-2">
                <div className="text-sm bold-600 full cursor-pointer dfb align-center gap-10" onClick={() => openLink("/community")}>
                   <MessageCircle size={18} strokeWidth={3} /> Community
+               </div>
+            </div>
+            <div className="box full pd-1 pdx-2">
+               <div className="text-sm bold-600 full cursor-pointer dfb align-center gap-10" onClick={() => openLink("/install")}>
+                  <Download size={18} strokeWidth={3} /> Install as App
                </div>
             </div>
             <div className="box full pd-15 pdx-2">

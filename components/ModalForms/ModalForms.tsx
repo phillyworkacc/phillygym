@@ -3,19 +3,22 @@ import { createPost, createPostReply } from "@/app/actions/community";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
-import { FormContent, SubHeading } from "../CourseFormats/CourseFormats";
+import { BodyContent, FormContent, Heading, SubHeading } from "../CourseFormats/CourseFormats";
 import { useModal } from "../Modal/ModalContext";
 import { searchUsers } from "@/app/actions/user";
-import { FullPost, User } from "@/types/types";
+import { FullPost, FullReply, User } from "@/types/types";
 import { CustomUserIcon, InstagramIcon, TiktokIcon } from "../Icons/Icon";
 import { formatMilliseconds, timeAgo } from "@/utils/date";
-import { SquareArrowOutUpRight } from "lucide-react";
+import { Download, SquareArrowOutUpRight } from "lucide-react";
 import { ellipsisText } from "@/utils/utils";
 import AwaitButton from "../AwaitButton/AwaitButton";
 import LoadingCard from "../Card/LoadingCard";
 import Link from "next/link";
 import Card from "../Card/Card";
 import Spacing from "../Spacing/Spacing";
+import { useSession } from "next-auth/react";
+import { installImages } from "@/utils/images";
+import { useSessionUser } from "@/helpers/useSessionUser";
 
 export default function CreatePostModalForm () {
    const router = useRouter();
@@ -108,10 +111,13 @@ export function SearchUsersForm () {
    )
 }
 
-export function CreatePostReplyModalForm ({ post }: { post: FullPost }) {
+export function CreatePostReplyModalForm ({ post, addOptimistic }: { post: FullPost, addOptimistic: (reply: FullReply) => void; }) {
    const router = useRouter();
    const [replyContent, setReplyContent] = useState("");
 	const { close } = useModal();
+   const { user } = useSessionUser();
+
+   if (user == null) return null;
    
    const postCardStyles: React.CSSProperties = {
       width: "100%", borderRadius: "15px",
@@ -125,7 +131,18 @@ export function CreatePostReplyModalForm ({ post }: { post: FullPost }) {
          return;
       }
       const created = await createPostReply(replyContent, post.postid);
-      if (created) toast.success("Added Reply"); else toast.error("Failed to add reply");
+      if (created) {
+         toast.success("Added Reply");
+         addOptimistic({
+            id: Date.now(),
+            replyid: created,
+            postid: post.postid,
+            userid: user?.userid!,
+            content: replyContent,
+            created: Date.now().toString(),
+            user: user!
+         })
+      } else toast.error("Failed to add reply");
       callback();
       close();
       router.refresh();
@@ -218,4 +235,42 @@ export function UserProfileViewer ({ user }: { user: User }) {
          <div className="text-xxs grey-5 full">Joined on {formatMilliseconds(parseInt(user.joined), true)}</div>
       </div>
    )
+}
+
+export function WelcomeInstallation () {
+   const router = useRouter();
+   const { data: session } = useSession();
+   const { close } = useModal();
+
+   return (<>
+      <img 
+         src={installImages.installBanner} 
+         alt="install banner image" 
+         style={{
+            width: "100%", height: "200px",
+            borderRadius: "15px 15px 0 0",
+            objectFit: "cover", objectPosition: "center",
+            userSelect: "none"
+         }} 
+      />
+      <Spacing />
+      <div className="box full pdx-2 pd-1 no-select">
+         <Heading>Welcome {session?.user?.name}</Heading>
+         <BodyContent>Install the website as an app for a better experience in the community</BodyContent>
+      </div>
+      <div className="box dfb column gap-10 full mt-05 pdx-2 mb-3 no-select">
+         <button
+            className="xxs tiny-shadow pd-1 full"
+            onClick={() => { close(); router.push("/install"); }}
+         >
+            <Download size={18} /> Install
+         </button>
+         <button
+            className="xxs outline-black tiny-shadow pd-1 full"
+            onClick={close}
+         >
+            Close
+         </button>
+      </div>
+   </>)
 }

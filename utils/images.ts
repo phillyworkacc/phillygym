@@ -36,6 +36,12 @@ import TobiPhysique2 from "@/public/assets/tobi-physique-2.png";
 import TobiPhysique3 from "@/public/assets/tobi-physique-3.png";
 import PosterImage from "@/public/brand/poster.jpg"
 
+import InstallBanner from "@/public/install/install-banner.jpg"
+import InstallStep1 from "@/public/install/install-step-1.jpg";
+import InstallStep2 from "@/public/install/install-step-2.jpg";
+import InstallStep3 from "@/public/install/install-step-3.jpg";
+import InstallStep4 from "@/public/install/install-step-4.jpg";
+
 export const posterBannerImage = PosterImage.src;
 
 export const mealImages = {
@@ -79,3 +85,11 @@ export const physiqueImages = {
    tobiPhysique2: TobiPhysique2.src,
    tobiPhysique3: TobiPhysique3.src,
 };
+
+export const installImages = {
+   installBanner: InstallBanner.src,
+   step1: InstallStep1.src,
+   step2: InstallStep2.src,
+   step3: InstallStep3.src,
+   step4: InstallStep4.src
+}

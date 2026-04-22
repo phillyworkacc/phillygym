@@ -5,6 +5,7 @@ import { useAllowedUserType, useAuthorizedUser } from "@/helpers/funcs"
 import { FullPost, Post } from "@/types/types";
 import { generateId } from "@/utils/uuid";
 import { and, desc, eq, gt, lt } from "drizzle-orm";
+import { getSessionUser } from "./user";
 
 export async function createPost (content: string) {
    const result = await useAuthorizedUser(async (user) => {
@@ -20,41 +21,71 @@ export async function createPost (content: string) {
 }
 
 export async function deletePost (postid: string) {
-   const result = await useAuthorizedUser(async (user) => {
-      const res = await db.delete(postsTable).where(and(
-         eq(postsTable.userid, user.userid),
-         eq(postsTable.postid, postid)
-      ));
-      return (res.rowCount === 1);
-   });
-   if (result == "no-user") return false;
-   return true;
+   const user = await getSessionUser();
+   if (user == "no-session") return false;
+   if (user == null) return false;
+
+   if (user.type === "admin") {
+      const result = await useAllowedUserType("admin", async (user) => {
+         const res = await db.delete(postsTable).where(eq(postsTable.postid, postid));
+         return (res.rowCount === 1);
+      });
+      if (result == "no-user") return false;
+      return true;
+   } else {
+      const result = await useAuthorizedUser(async (user) => {
+         const res = await db.delete(postsTable).where(and(
+            eq(postsTable.userid, user.userid),
+            eq(postsTable.postid, postid)
+         ));
+         return (res.rowCount === 1);
+      });
+      if (result == "no-user") return false;
+      return true;
+   }
 }
 
 export async function createPostReply (content: string, postid: string) {
    const result = await useAuthorizedUser(async (user) => {
+      const replyid = generateId();
       const res = await db.insert(repliesTable).values({
-         replyid: generateId(), postid,
+         replyid, postid,
          content, created: Date.now().toString(),
          userid: user.userid
       });
-      return (res.rowCount === 1);
+      return (res.rowCount === 1) ? replyid : false;
    });
    if (result == "no-user") return false;
-   return true;
+   return result;
 }
 
 export async function deletePostReply (postid: string, replyid: string) {
-   const result = await useAuthorizedUser(async (user) => {
-      const res = await db.delete(repliesTable).where(and(
-         eq(repliesTable.userid, user.userid),
-         eq(repliesTable.postid, postid),
-         eq(repliesTable.replyid, replyid)
-      ));
-      return (res.rowCount === 1);
-   });
-   if (result == "no-user") return false;
-   return true;
+   const user = await getSessionUser();
+   if (user == "no-session") return false;
+   if (user == null) return false;
+
+   if (user.type === "admin") {
+      const result = await useAllowedUserType("admin", async (user) => {
+         const res = await db.delete(repliesTable).where(and(
+            eq(repliesTable.postid, postid),
+            eq(repliesTable.replyid, replyid)
+         ));
+         return (res.rowCount === 1);
+      });
+      if (result == "no-user") return false;
+      return true;
+   } else {
+      const result = await useAuthorizedUser(async (user) => {
+         const res = await db.delete(repliesTable).where(and(
+            eq(repliesTable.userid, user.userid),
+            eq(repliesTable.postid, postid),
+            eq(repliesTable.replyid, replyid)
+         ));
+         return (res.rowCount === 1);
+      });
+      if (result == "no-user") return false;
+      return true;
+   }
 }
 
 export async function likePost (postid: string) {
