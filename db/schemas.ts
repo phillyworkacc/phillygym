@@ -11,7 +11,7 @@ export const usersTable = pgTable("users", {
    password: text("password").notNull(),
    type: userTypeEnum("type").notNull().default("user"),
    premiumAccess: boolean("premium_access").default(false),
-   profileImage: text("profile_image").notNull().default("user-default.jpg"),
+   profileImage: text("profile_image").notNull().default("https://phillygym.site/user-default.jpg"),
    instagram: text("instagram").notNull().default(""),
    tiktok: text("tiktok").notNull().default(""),
    suspended: boolean("suspended").default(false),

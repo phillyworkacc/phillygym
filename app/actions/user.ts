@@ -27,7 +27,7 @@ export async function createUserAccount (name: string, email: string, password: 
       const userid = generateId();
       const hashedPwd = hashedPassword(password);
       const res = await db.insert(usersTable).values({
-         userid, name, email, password: hashedPwd, profileImage: "user-default.jpg",
+         userid, name, email, password: hashedPwd, profileImage: "https://phillygym.site/user-default.jpg",
          instagram: "", tiktok: "", suspended: false, banned: false,
          joined: Date.now().toString()
       });

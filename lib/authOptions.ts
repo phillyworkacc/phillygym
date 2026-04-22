@@ -42,7 +42,7 @@ export const authOptions: NextAuthOptions = {
                         id: '',
                         email: credentials?.email!,
                         name: credentials?.email!,
-                        image: 'user-default.jpg'
+                        image: 'https://phillygym.site/user-default.jpg'
                      }
                   } else return null;
                }
