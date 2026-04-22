@@ -1,0 +1,20 @@
+{
+   "name": "Philly Gym",
+   "short_name": "Philly Gym",
+   "description": "A community for guys and girls to jacked, share progress and understand muscle growth",
+   "background_color": "#ffffff",
+   "theme_color": "#ffffff",
+   "icons": [
+      {
+         "src": "/logo.png",
+         "sizes": "192x192",
+         "type": "image/png"
+      }
+   ],
+   "start_url": "/",
+   "display": "standalone",
+   "orientation": "portrait",
+   "lang": "en",
+   "dir": "ltr",
+   "categories": ["productivity"]
+}

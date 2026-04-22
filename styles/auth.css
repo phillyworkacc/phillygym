@@ -1,0 +1,25 @@
+.auth {
+   width: 100vw;
+   padding: 20px;
+}
+
+.auth > .auth-container {
+   width: 100%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   flex-direction: column;
+}
+
+.auth-container > .form-content {
+   width: 100%;
+   padding: 5px 0;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+.auth-container > .form-content > input {
+   width: 100%;
+   max-width: 450px;
+}

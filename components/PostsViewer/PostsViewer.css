@@ -1,0 +1,31 @@
+.post-viewer {
+   width: 100%;
+   display: flex;
+   align-items: start;
+   justify-content: center;
+}
+
+.post-viewer .posts-container {
+   width: 100%;
+   max-width: 980px;
+   display: flex;
+   flex-direction: column;
+   gap: 15px;
+}
+
+.post-viewer-plain {
+   width: 100%;
+   display: flex;
+   align-items: start;
+   justify-content: start;
+}
+
+.post-viewer-plain .posts-container-plain {
+   width: 100%;
+   max-width: 980px;
+   display: flex;
+   flex-direction: column;
+   align-items: start;
+   justify-content: start;
+   gap: 15px;
+}

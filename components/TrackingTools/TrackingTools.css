@@ -1,0 +1,30 @@
+.tracking-tools {
+   width: 100%;
+   display: flex;
+   flex-wrap: wrap;
+   gap: 10px;
+   user-select: none;
+}
+
+.tracking-tools .tracking-tool-card {
+   width: 100%;
+   max-width: 400px;
+   border: 1px solid #ececec;
+   border-radius: 20px;
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.094);
+   padding: 20px;
+   scale: 1;
+   cursor: pointer;
+}
+
+.tracking-tools .tracking-tool-card:active { scale: 0.9; }
+
+.tracking-tools .tracking-tool-card .tracking-tool-icon {
+   width: fit-content;
+   aspect-ratio: 1;
+   padding: 8px;
+   border-radius: 100%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
