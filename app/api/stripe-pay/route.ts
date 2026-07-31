@@ -34,21 +34,31 @@ export async function POST(req: Request) {
       case "checkout.session.completed": {
          const session = event.data.object as Stripe.Checkout.Session;
 
-         // Get whatever you passed when creating Checkout
-         const email = session.customer_details?.email;
+         // get price id of the product
+         const originalPhillyGymPriceId = "price_1TzM30RKHaUAk3Ex0RSqZShh";
+         const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { expand: ["data.price.product"] });
+         const priceId = lineItems.data[0].price?.id;
 
-         // Tell user email is not found
-         if (!email) {
-            console.error("Customer email not found.");
-            break;
+         // validate price id
+         if (priceId === originalPhillyGymPriceId) {
+            // Get whatever you passed when creating Checkout
+            const email = session.customer_details?.email;
+   
+            // Tell user email is not found
+            if (!email) {
+               console.error("Customer email not found.");
+               break;
+            }
+   
+            // Mark the user as having purchased the guide
+            await db.update(usersTable)
+               .set({ premiumAccess: true })
+               .where(eq(usersTable.email, email));
+   
+            console.log(`${email} purchased the gym guide.`);
+         } else {
+            return new Response(JSON.stringify({ success: false }), { status: 400 });
          }
-
-         // Mark the user as having purchased the guide
-         await db.update(usersTable)
-            .set({ premiumAccess: true })
-            .where(eq(usersTable.email, email));
-
-         console.log(`${email} purchased the gym guide.`);
          break;
       }
    }
