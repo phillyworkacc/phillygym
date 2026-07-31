@@ -1,0 +1,11 @@
+.subscribe-pay-wall {
+   width: 100vw;
+   height: 100vh;
+   background-color: #c7cfff;
+   padding: 40px;
+   display: flex;
+   align-items: start;
+   justify-content: center;
+   overflow-y: scroll;
+   overflow-x: hidden;
+}

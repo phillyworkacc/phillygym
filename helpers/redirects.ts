@@ -17,6 +17,7 @@ export async function redirectUnauthorized () {
    if (sessionUser === "no-session") redirect(loginUrl);
    if (sessionUser === null) redirect(loginUrl);
    if (sessionUser.banned) redirect("/banned");
+   if (sessionUser.premiumAccess === false) redirect("/subscribe");
 }
 
 export async function redirectAuthorized () {
@@ -24,6 +25,7 @@ export async function redirectAuthorized () {
    if (sessionUser === "no-session") return;
    if (sessionUser === null) return;
    if (sessionUser.banned) redirect("/banned");
+   if (sessionUser.premiumAccess === false) redirect("/subscribe");
    if (sessionUser.type == "admin") redirect(userTypeUrlRedirects[sessionUser.type]);
    if (sessionUser.type == "user") redirect(userTypeUrlRedirects[sessionUser.type]);
 }
@@ -33,6 +35,7 @@ export async function redirectAdminOnly () {
    if (sessionUser === "no-session") redirect(loginUrl)
    if (sessionUser === null) return;
    if (sessionUser.banned) redirect("/banned");
+   if (sessionUser.premiumAccess === false) redirect("/subscribe");
    if (sessionUser.type == "user") return;
    if (sessionUser.type === "admin") redirect(userTypeUrlRedirects[sessionUser.type]);
 }
@@ -42,5 +45,6 @@ export async function allowOnlyUserTypeRedirect (userType: UserType) {
    if (sessionUser === "no-session") redirect(loginUrl);
    if (sessionUser === null) redirect(loginUrl);
    if (sessionUser.banned) redirect("/banned");
+   if (sessionUser.premiumAccess === false) redirect("/subscribe");
    if (sessionUser.type !== userType) redirect(userTypeUrlRedirects[sessionUser.type]);
 }
