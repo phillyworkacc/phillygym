@@ -19,6 +19,7 @@ export async function POST(req: Request) {
    
    // check that signature exists
    if (!signature) {
+      console.log("Missing signature")
       return NextResponse.json({ error: "Missing signature" }, { status: 400 });
    }
 
@@ -62,6 +63,5 @@ export async function POST(req: Request) {
          break;
       }
    }
-
    return new Response(JSON.stringify({ success: true }), { status: 200 });
 }

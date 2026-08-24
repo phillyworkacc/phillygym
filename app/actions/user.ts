@@ -5,7 +5,7 @@ import { useAuthorizedUser } from "@/helpers/funcs";
 import { authOptions } from "@/lib/authOptions"
 import { User } from "@/types/types";
 import { hashedPassword, generateId } from "@/utils/uuid";
-import { and, eq, like, ne, or, sql } from "drizzle-orm";
+import { and, eq, ne, or, sql } from "drizzle-orm";
 import { getServerSession } from "next-auth"
 import { uploadImageToCloudinary } from "./extras";
 import sendMail from "@/lib/sendMail";
