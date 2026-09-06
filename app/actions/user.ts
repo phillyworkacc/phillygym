@@ -18,7 +18,7 @@ export async function getSessionUser (): Promise<"no-session" | null | User> {
 
    const results = await db.select()
       .from(usersTable)
-      .where(eq(usersTable.email, session.user.email!));
+      .where(eq(usersTable.email, session.user.email!)).limit(1);
 
    return results.length > 0 ? results[0] as User : null;
 }
